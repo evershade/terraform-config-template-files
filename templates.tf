@@ -174,7 +174,7 @@ data "null_data_source" "validate_sources" {
 locals {
   # Merge all the configuration data into a single map. Include validation data source to enforce wait.
   template_file_configurations = merge(
-    data.null_data_source.validate_sources.output,
+    data.null_data_source.validate_sources.outputs,
     {
       for key, instances in local.key_instances_data :
       key => length(instances) > 1 ? merge(instances[*].value...) : instances[0].value
