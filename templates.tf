@@ -2,7 +2,7 @@
 locals {
   #region Load template files
   # Load yaml files from the specified template file directories and convert them to Terraform objects
-  yaml_filepaths = var.enabled_template_types.yaml ? distinct(flatten([
+  yaml_filepaths = var.enabled_template_file_types.yaml ? distinct(flatten([
     for dir in var.template_file_directories : fileset(dir, "*.{yml,yaml}.${var.template_file_suffix}")
   ])) : []
   yaml_files = { for filepath in local.yaml_filepaths : filepath => {
@@ -13,7 +13,7 @@ locals {
   } }
 
   # Load json files from the specified template file directories and convert them to Terraform objects
-  json_filepaths = var.enabled_template_types.json ? distinct(flatten([
+  json_filepaths = var.enabled_template_file_types.json ? distinct(flatten([
     for dir in var.template_file_directories : fileset(dir, "*.json.${var.template_file_suffix}")
   ])) : []
   json_files = { for filepath in local.json_filepaths : filepath => {
@@ -24,7 +24,7 @@ locals {
   } }
 
   # Load tfexpr files from the specified template file directories and convert them to Terraform objects
-  tfexpr_filepaths = var.enabled_template_types.tfexpr ? distinct(flatten([
+  tfexpr_filepaths = var.enabled_template_file_types.tfexpr ? distinct(flatten([
     for dir in var.template_file_directories : fileset(dir, "*.tfexpr.${var.template_file_suffix}")
   ])) : []
   tfexpr_files = { for filepath in local.tfexpr_filepaths : filepath => {
@@ -35,7 +35,7 @@ locals {
   } }
 
   # Load tfvars files from the specified template file directories and convert them to Terraform objects
-  tfvars_filepaths = var.enabled_template_types.tfvars ? distinct(flatten([
+  tfvars_filepaths = var.enabled_template_file_types.tfvars ? distinct(flatten([
     for dir in var.template_file_directories : fileset(dir, "*.tfvars.${var.template_file_suffix}")
   ])) : []
   tfvars_files = { for filepath in local.tfvars_filepaths : filepath => {
