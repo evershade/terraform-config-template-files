@@ -184,7 +184,7 @@ locals {
   # Group keys with prefixes
   grouped_template_file_configurations = {
     for prefix in var.group_key_prefixes : prefix => {
-      for key, value in local.template_file_configurations : trimprefix(key, prefix) => value
+      for key, value in local.template_file_configurations : trimprefix(key, "${prefix}_") => value
       if startswith(key, "${prefix}_")
     }
   }
