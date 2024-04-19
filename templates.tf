@@ -172,6 +172,7 @@ data "null_data_source" "validate_sources" {
 #endregion Validate config
 
 locals {
+  # TODO: move merging to a different module, to be called on the outputs of this module
   # Merge all the configuration data into a single map. Include validation data source to enforce wait.
   template_file_configurations = merge(
     data.null_data_source.validate_sources.outputs,
