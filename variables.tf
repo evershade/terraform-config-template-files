@@ -13,12 +13,17 @@ variable "template_file_suffix" {
 variable "enabled_template_file_types" {
   description = "Whether to load each template file type."
   type = object({
-    yaml   = optional(bool, true)
-    json   = optional(bool, true)
-    tfexpr = optional(bool, true)
-    tfvars = optional(bool, true)
+    yaml   = optional(bool, false)
+    json   = optional(bool, false)
+    tfexpr = optional(bool, false)
+    tfvars = optional(bool, false)
   })
   default = {}
+
+  validation {
+    condition     = anytrue(values(var.enabled_template_file_types))
+    error_message = "At least one template file type must be enabled."
+  }
 }
 
 variable "group_key_prefixes" {

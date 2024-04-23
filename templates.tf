@@ -39,7 +39,7 @@ locals {
     for dir in var.template_file_directories : fileset(dir, "*.tfvars.${var.template_file_suffix}")
   ])) : []
   tfvars_files = { for filepath in local.tfvars_filepaths : filepath => {
-    tf   = {} #provider::terraform::decode_tfvars(templatefile(filepath, {}))  # Waiting on bugfix
+    tf   = provider::terraform::decode_tfvars(templatefile(filepath, {}))
     raw  = file(filepath)
     type = "tfvars"
     name = basename(filepath)
