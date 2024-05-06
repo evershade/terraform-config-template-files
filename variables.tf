@@ -11,7 +11,7 @@ variable "template_file_suffix" {
 }
 
 variable "enabled_template_file_types" {
-  description = "Whether to load each template file type."
+  description = "Whether to load each template file type. NOTE: Enabling `tfvars` templates requires Terraform 1.8.1 or later."
   type = object({
     yaml   = optional(bool, false)
     json   = optional(bool, false)

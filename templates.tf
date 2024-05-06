@@ -35,11 +35,13 @@ locals {
   } }
 
   # Load tfvars files from the specified template file directories and convert them to Terraform objects
+  # NOTE: Enabling `tfvars` templates requires Terraform 1.8.1 or later
   tfvars_filepaths = var.enabled_template_file_types.tfvars ? distinct(flatten([
     for dir in var.template_file_directories : fileset(dir, "*.tfvars.${var.template_file_suffix}")
   ])) : []
+  # NOTE: Call to `decode_tfvars` function moved to `tfvars_to_tf.tfexpr.tftpl` so the module doesn't break if Terraform version is less than 1.8.1
   tfvars_files = { for filepath in local.tfvars_filepaths : filepath => {
-    tf   = provider::terraform::decode_tfvars(templatefile(filepath, {}))
+    tf   = templatefile("${path.module}/tfvars_to_tf.tfexpr.tftpl", {tfvars_file = templatefile(filepath, {})})
     raw  = file(filepath)
     type = "tfvars"
     name = basename(filepath)
