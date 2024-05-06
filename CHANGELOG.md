@@ -13,5 +13,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Support for loading template files from specified directories.
 - Conversion of template files to Terraform objects.
 - Merging of all configuration data into a single map.
+- Providing a user-provided map of variables to each template file for rendering dynamic variables inside the templates.
 - Grouping of keys with prefixes.
 - Validation of configuration.

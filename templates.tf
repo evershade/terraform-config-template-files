@@ -6,7 +6,7 @@ locals {
     for dir in var.template_file_directories : fileset(dir, "*.{yml,yaml}.${var.template_file_suffix}")
   ])) : []
   yaml_files = { for filepath in local.yaml_filepaths : filepath => {
-    tf   = yamldecode(templatefile(filepath, {}))
+    tf   = yamldecode(templatefile(filepath, var.template_variables))
     raw  = file(filepath)
     type = "yaml"
     name = basename(filepath)
@@ -17,7 +17,7 @@ locals {
     for dir in var.template_file_directories : fileset(dir, "*.json.${var.template_file_suffix}")
   ])) : []
   json_files = { for filepath in local.json_filepaths : filepath => {
-    tf   = jsondecode(templatefile(filepath, {}))
+    tf   = jsondecode(templatefile(filepath, var.template_variables))
     raw  = file(filepath)
     type = "json"
     name = basename(filepath)
@@ -28,7 +28,7 @@ locals {
     for dir in var.template_file_directories : fileset(dir, "*.tfexpr.${var.template_file_suffix}")
   ])) : []
   tfexpr_files = { for filepath in local.tfexpr_filepaths : filepath => {
-    tf   = templatefile(filepath, {})
+    tf   = templatefile(filepath, var.template_variables)
     raw  = file(filepath)
     type = "tfexpr"
     name = basename(filepath)
@@ -41,7 +41,7 @@ locals {
   ])) : []
   # NOTE: Call to `decode_tfvars` function moved to `tfvars_to_tf.tfexpr.tftpl` so the module doesn't break if Terraform version is less than 1.8.1
   tfvars_files = { for filepath in local.tfvars_filepaths : filepath => {
-    tf   = templatefile("${path.module}/tfvars_to_tf.tfexpr.tftpl", {tfvars_file = templatefile(filepath, {})})
+    tf   = templatefile("${path.module}/tfvars_to_tf.tfexpr.tftpl", {tfvars_file = templatefile(filepath, var.template_variables)})
     raw  = file(filepath)
     type = "tfvars"
     name = basename(filepath)

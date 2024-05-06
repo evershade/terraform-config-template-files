@@ -26,6 +26,12 @@ variable "enabled_template_file_types" {
   }
 }
 
+variable "template_variables" {
+  description = "A map of variables to be provided to each template file."
+  type        = map(any)
+  default     = {}
+}
+
 variable "group_key_prefixes" {
   description = "List of prefixes (eg. 'caf', 'azapi') used to group keys in the merged configuration map. Keys starting with '<prefix>_' are included in a separate grouped configuration, with the prefix removed from the key in the final output. This allows for logical separation and structured access to related configuration settings."
   type        = list(string)

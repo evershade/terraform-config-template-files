@@ -19,6 +19,7 @@ This Terraform module is designed to manage and configure template files for you
 - [`template_file_directories`](./variables.tf): List of directories to search for template files. Default is an empty list.
 - [`template_file_suffix`](./variables.tf): Suffix extension for template files. Default is 'tftpl' for files ending in '.tftpl'.
 - [`enabled_template_file_types`](./variables.tf): Whether to load each template file type. Note: Enabling `tfvars` templates requires Terraform 1.8.1 or later.
+- [`template_variables`](./variables.tf): A map of variables to be provided to each template file for rendering dynamic variables inside the templates. Default is an empty map.
 - [`group_key_prefixes`](./variables.tf): Prefixes for grouping keys.
 
 ## Outputs
@@ -36,6 +37,47 @@ module "template_file_configuration" {
   version = "1.0.0"
 
   # set your variables here
+  template_variables = {
+    var1 = "value1"
+    var2 = "value2"
+  }
+}
+```
+
+### Providing Template Variables
+
+This feature allows you to provide a map of variables to the templates, which can be used to render dynamic variables inside the templates.
+
+Here is an example of how you can define this variable:
+
+```terraform
+module "template_file_configuration" {
+  source  = "app.terraform.io/my-module/template_file_configuration"
+  version = "1.0.0"
+
+  template_variables = {
+    var1 = "value1"
+    var2 = "value2"
+  }
+}
+```
+In this example, `var1` and `var2` will be available as variables inside the templates. For instance, if you have a template file with the following content:
+
+```tfvars.tpl
+variable1 = "${var1}"
+variable2 = "${var2}"
+```
+
+The rendered configuration will be:
+
+```terraform
+{
+  ... other configurations
+
+  variable1 = "value1"
+  variable2 = "value2"
+
+  ... other configurations
 }
 ```
 
