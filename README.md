@@ -61,9 +61,10 @@ module "template_file_configuration" {
   }
 }
 ```
+
 In this example, `var1` and `var2` will be available as variables inside the templates. For instance, if you have a template file with the following content:
 
-```tfvars.tpl
+```example.tfvars.tftpl
 variable1 = "${var1}"
 variable2 = "${var2}"
 ```
