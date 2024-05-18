@@ -1,4 +1,3 @@
-
 locals {
   #region Load template files
   # Load yaml files from the specified template file directories and convert them to Terraform objects

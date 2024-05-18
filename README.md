@@ -1,14 +1,17 @@
-# Template File Configuration Module for Terraform
+# Template File Configuration module for Terraform
 
 This Terraform module is designed to manage and configure template files for your Terraform configuration. It provides a flexible way to handle different types of template files including `tfvars`, `yaml`, `json`, and `tfexpr`.
 
 ## Features
 
 - Load template files from specified directories
+- Support multiple template file types: YAML, JSON, Terraform expressions (tfexpr), and Terraform variables (tfvars)
 - Convert template files to Terraform objects
-- Merge all configuration data into a single map
-- Group keys with prefixes
-- Ensure keys are not overwritten by duplicates 
+- Merge configurations from multiple files into a single map
+- Validate the merged configuration to ensure:
+  - all instances of a key are mergeable
+  - keys are not duplicated and overwritten
+- Group keys with prefixes for structured access to related configuration settings
 
 ## Requirements
 
@@ -16,16 +19,16 @@ This Terraform module is designed to manage and configure template files for you
 
 ## Inputs
 
-- [`template_file_directories`](./variables.tf): List of directories to search for template files. Default is an empty list.
-- [`template_file_suffix`](./variables.tf): Suffix extension for template files. Default is 'tftpl' for files ending in '.tftpl'.
-- [`enabled_template_file_types`](./variables.tf): Whether to load each template file type. Note: Enabling `tfvars` templates requires Terraform 1.8.1 or later.
-- [`template_variables`](./variables.tf): A map of variables to be provided to each template file for rendering dynamic variables inside the templates. Default is an empty map.
-- [`group_key_prefixes`](./variables.tf): Prefixes for grouping keys.
+- [`template_file_directories`](./variables.tf): List of directories to search for template files.
+- [`template_file_suffix`](./variables.tf): Suffix extension for template files. Default is `"tftpl"` for files ending in ".tftpl".
+- [`enabled_template_file_types`](./variables.tf): Whether to load each template file type. All types default to `false`. NOTE: Enabling `tfvars` templates requires Terraform 1.8.1 or later."
+- [`template_variables`](./variables.tf): A map of variables to be provided to each template file for rendering dynamic variables inside the templates. Default is an empty map `{}`.
+- [`group_key_prefixes`](./variables.tf): List of prefixes (eg. `"caf"`, `"azapi"`) used to group keys in the merged configuration map. Keys starting with `"<prefix>_"` are included in a separate grouped configuration. See details below at [`Grouping Keys with Prefixes`](#grouping-keys-with-prefixes). Default is an empty list `[]`.
 
 ## Outputs
 
-- [`all_configurations`](./outputs.tf): A map of all the configuration data.
-- [`grouped_configurations`](./outputs.tf): A map of grouped keys with prefixes.
+- [`all_configurations`](./outputs.tf): The merged and validated configurations from all template files.
+- [`grouped_configurations`](./outputs.tf): The grouped configurations from all template files, based on key prefixes. See details below at [`Grouping Keys with Prefixes`](#grouping-keys-with-prefixes).
 
 ## Usage
 
@@ -84,7 +87,9 @@ The rendered configuration will be:
 
 ### Grouping Keys with Prefixes
 
-This module provides a feature to group keys based on their prefixes. This is particularly useful when you have a large number of keys and you want to categorize them for better organization and easier access.
+This feature groups keys based on their prefixes. This allows for logical separation and structured access to related configuration settings.
+
+Prefix grouping is particularly useful when you have a large number of keys and you want to categorize them for better organization and easier access.
 
 The input for this feature is a list of prefixes that you want to use for grouping. This is provided through the [`group_key_prefixes`](./variables.tf) variable in your Terraform configuration file.
 
@@ -115,7 +120,7 @@ For instance, if your configuration data is as follows:
 
 The output of [`grouped_configurations`](./outputs.tf) will be:
 
-```
+```terraform
 {
   "app" = {
     "name" = "myapp"
@@ -128,9 +133,10 @@ The output of [`grouped_configurations`](./outputs.tf) will be:
 }
 ```
 
-Note that the prefix is removed from the key in the output, though the unchanged configuration will still be included in the `all_configurations` output. Also, keys that do not start with any of the specified prefixes are not included in the output.
+Notes:
 
-This feature allows you to manage your configuration data in a more structured and organized manner.
+- Keys that do not start with any of the specified prefixes are not included in the `grouped_configurations` output.
+- The prefix is removed from the key in the output, though the unchanged configuration will still be included in the `all_configurations` output.
 
 ## Contributing
 
@@ -138,4 +144,4 @@ Contributions to this module are welcome. Please ensure that you update the rele
 
 ## License
 
-This module is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
