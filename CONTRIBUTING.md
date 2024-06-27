@@ -34,7 +34,7 @@ We maintain a list of known to-do items that require attention. If you are looki
 - [ ] Enhance documentation with examples
 - [ ] Refactor merging to a module
 - [ ] Add Terraform type field for root key instances data
-- [ ] Add module tests
+- [ ] Improve module tests
 
 ## Code of Conduct
 Please note that this project follows a [Code of Conduct](CODE_OF_CONDUCT.md). We expect all contributors to adhere to this code and create a positive and inclusive environment for everyone.
