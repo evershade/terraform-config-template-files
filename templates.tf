@@ -2,7 +2,7 @@ locals {
   #region Load template files
   # Load yaml files from the specified template file directories and convert them to Terraform objects
   yaml_filepaths = var.enabled_template_file_types.yaml ? distinct(flatten([
-    for dir in var.template_file_directories : fileset(dir, "*.{yml,yaml}.${var.template_file_suffix}")
+    for dir in local.template_file_directories : fileset(dir, "*.{yml,yaml}.${var.template_file_suffix}")
   ])) : []
   yaml_files = { for filepath in local.yaml_filepaths : filepath => {
     tf   = yamldecode(templatefile(filepath, var.template_variables))
@@ -13,7 +13,7 @@ locals {
 
   # Load json files from the specified template file directories and convert them to Terraform objects
   json_filepaths = var.enabled_template_file_types.json ? distinct(flatten([
-    for dir in var.template_file_directories : fileset(dir, "*.json.${var.template_file_suffix}")
+    for dir in local.template_file_directories : fileset(dir, "*.json.${var.template_file_suffix}")
   ])) : []
   json_files = { for filepath in local.json_filepaths : filepath => {
     tf   = jsondecode(templatefile(filepath, var.template_variables))
@@ -24,7 +24,7 @@ locals {
 
   # Load tfexpr files from the specified template file directories and convert them to Terraform objects
   tfexpr_filepaths = var.enabled_template_file_types.tfexpr ? distinct(flatten([
-    for dir in var.template_file_directories : fileset(dir, "*.tfexpr.${var.template_file_suffix}")
+    for dir in local.template_file_directories : fileset(dir, "*.tfexpr.${var.template_file_suffix}")
   ])) : []
   tfexpr_files = { for filepath in local.tfexpr_filepaths : filepath => {
     tf   = templatefile(filepath, var.template_variables)
@@ -36,11 +36,11 @@ locals {
   # Load tfvars files from the specified template file directories and convert them to Terraform objects
   # NOTE: Enabling `tfvars` templates requires Terraform 1.8.1 or later
   tfvars_filepaths = var.enabled_template_file_types.tfvars ? distinct(flatten([
-    for dir in var.template_file_directories : fileset(dir, "*.tfvars.${var.template_file_suffix}")
+    for dir in local.template_file_directories : fileset(dir, "*.tfvars.${var.template_file_suffix}")
   ])) : []
   # NOTE: Call to `decode_tfvars` function moved to `tfvars_to_tf.tfexpr.tftpl` so the module doesn't break if Terraform version is less than 1.8.1
   tfvars_files = { for filepath in local.tfvars_filepaths : filepath => {
-    tf   = templatefile("${path.module}/tfvars_to_tf.tfexpr.tftpl", {tfvars_file = templatefile(filepath, var.template_variables)})
+    tf   = templatefile("${path.module}/tfvars_to_tf.tfexpr.tftpl", { tfvars_file = templatefile(filepath, var.template_variables) })
     raw  = file(filepath)
     type = "tfvars"
     name = basename(filepath)
@@ -104,21 +104,6 @@ locals {
   # ```
   #endregion Prepare for config merge
 
-  #region Debugging locals for `terraform console`
-  debug_template_locals = {
-    yaml_filepaths     = local.yaml_filepaths
-    yaml_files         = local.yaml_files
-    json_filepaths     = local.json_filepaths
-    json_files         = local.json_files
-    tfexpr_filepaths   = local.tfexpr_filepaths
-    tfexpr_files       = local.tfexpr_files
-    tfvars_filepaths   = local.tfvars_filepaths
-    tfvars_files       = local.tfvars_files
-    all_files          = local.all_files
-    unique_root_keys   = local.unique_root_keys
-    key_instances_data = local.key_instances_data
-  }
-  #endregion Debugging locals for `terraform console`
 }
 
 #region Validate & merge config
@@ -162,7 +147,7 @@ data "null_data_source" "validate_sources" {
         join("\n", [
           for key, instances in local.key_instances_data :
           "- Key '${key}' in ${join(", ", formatlist("'%s'", instances[*].filepath))}"
-          if length(distinct(flatten([for instance in instances : keys(instance.value)]))) != length(flatten([for instance in instances : keys(instance.value)]))
+          if length(distinct(flatten([for instance in instances : keys(instance.value) if instance.mergeable]))) != length(flatten([for instance in instances : keys(instance.value) if instance.mergeable]))
         ])
       ])
     }
@@ -174,7 +159,7 @@ locals {
   # Merge all the configuration data into a single map.
   # TODO: move merging to a module
   template_file_configurations = merge(
-    data.null_data_source.validate_sources.outputs,    # Include validation data source to enforce wait.
+    data.null_data_source.validate_sources.outputs, # Include validation data source to enforce wait.
     {
       for key, instances in local.key_instances_data :
       key => length(instances) > 1 ? merge(instances[*].value...) : instances[0].value
