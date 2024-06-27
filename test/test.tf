@@ -1,15 +1,11 @@
 variable "template_vars" {
-  description = "A map of variables to be provided to each template file. Defaults to an empty map `{}`."
-  type        = map(any)
-  default = {
-    test = "test"
-  }
+  description = "An object where keys represent variables to be provided to each template file."
+  default = {}
 }
 
 module "config_files" {
   source = "../"
 
-  #   template_file_directories = ["abc"]
   template_file_suffix = "tftpl"
   group_key_prefixes   = ["test"]
 

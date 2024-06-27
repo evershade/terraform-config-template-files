@@ -7,5 +7,12 @@ ${{
   }
 
   test_tfexpr_group = "another group value"
+  tfexpr_myvar      = myvar
+  tfexpr_mylistvar  = mylistvar
+
+  merge_key = {
+    tfexpr = "tfexpr_val"
+    # yaml   = "yaml_steal!"  # This will trigger a collision error
+  }
 
 }}

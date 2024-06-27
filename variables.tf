@@ -30,8 +30,7 @@ variable "enabled_template_file_types" {
 }
 
 variable "template_variables" {
-  description = "A map of variables to be provided to each template file. Defaults to an empty map `{}`."
-  type        = map(any)
+  description = "An object where key/value pairs represent variables to be provided to each template file. Defaults to an empty object `{}`."
   default     = {}
 }
 

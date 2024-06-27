@@ -1,5 +1,5 @@
 locals {
-  debug = true
+  debug = false
 }
 
 /*
@@ -14,7 +14,7 @@ output "debug_template_file_directories" {
   }
 } /**/
 
-/**/
+/*
 output debug_template_locals {
   description = "Mid-stage local values for templates"
   value = {
