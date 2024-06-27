@@ -12,6 +12,7 @@ This Terraform module is designed to manage and configure template files for you
   - all instances of a key are mergeable
   - keys are not duplicated and overwritten
 - Group keys with prefixes for structured access to related configuration settings
+- Input map of variables to be provided to each template file for rendering dynamic variables inside the templates
 
 ## Requirements
 
@@ -108,14 +109,14 @@ In this example, any keys that start with "app_" or "db_" will be grouped under 
 
 For instance, if your configuration data is as follows:
 
-```variables.tf
-{
-  "app_name" = "myapp"
-  "app_version" = "1.0.0"
-  "db_name" = "mydb"
-  "db_version" = "1.0.0"
-  "other_key" = "value"
-}
+```config.yaml.tftpl
+
+app_name    : myapp
+app_version : 1.0.0
+db_name     : mydb
+db_version  : 1.0.0
+other_key   : value
+
 ```
 
 The output of [`grouped_configurations`](./outputs.tf) will be:

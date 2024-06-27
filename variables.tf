@@ -1,6 +1,10 @@
 variable "template_file_directories" {
   description = "List of directories to search for template files."
   type        = list(string)
+  default     = []
+}
+locals {
+  template_file_directories = length(var.template_file_directories) == 0 ? [path.root] : var.template_file_directories
 }
 
 variable "template_file_suffix" {
