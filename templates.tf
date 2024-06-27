@@ -70,7 +70,7 @@ locals {
   #endregion Merge files
 
   #region Prepare for config merge
-  # Extract unique root-level keys from `all_files`
+  # Extract unique root-level keys from `all_files` object. These will be used to merge root keys and detect child key collisions.
   unique_root_keys = toset(flatten([
     for file in values(local.all_files) : keys(file.tf)
   ]))

@@ -140,7 +140,7 @@ Notes:
 
 ## Contributing
 
-Contributions to this module are welcome. Please ensure that you update the relevant documentation and tests when making changes.
+Contributions to this module are welcome. Check the [CONTRIBUTING.md](CONTRIBUTING.md) file for any recorded To Dos. Please ensure that you update the relevant documentation and tests when making changes.
 
 ## License
 

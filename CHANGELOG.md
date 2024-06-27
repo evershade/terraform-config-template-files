@@ -12,7 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Initial release of the module.
 - Support for loading template files from specified directories.
 - Conversion of template files to Terraform objects.
-- Merging of all configuration data into a single map.
-- Providing a user-provided map of variables to each template file for rendering dynamic variables inside the templates.
-- Grouping of keys with prefixes.
-- Validation of configuration.
+- Merge of all configuration data into a single map.
+- A user-provided map of variables for each template file to render dynamic variables inside the templates.
+- Group keys with prefixes.
+- Validate configuration and provide error messages.
+  - Check that all duplicated root keyes are mergeable.
+  - Check that no child keys are duplicated as collisions would be silently overwritten during merge of root keys.
+
