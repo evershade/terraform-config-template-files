@@ -82,8 +82,6 @@ locals {
       value     = file_data.tf[root_key]
       mergeable = can(keys(file_data.tf[root_key])) # Assume a value is mergeable if it has keys (i.e., it's a map/object).
       # TODO: Add a type field and determine the Terraform type of the value
-
-
     } if contains(keys(file_data.tf), root_key)
   ] }
 
@@ -173,10 +171,10 @@ data "null_data_source" "validate_sources" {
 #endregion Validate config
 
 locals {
-  # TODO: move merging to a different module, to be called on the outputs of this module
-  # Merge all the configuration data into a single map. Include validation data source to enforce wait.
+  # Merge all the configuration data into a single map.
+  # TODO: move merging to a module
   template_file_configurations = merge(
-    data.null_data_source.validate_sources.outputs,
+    data.null_data_source.validate_sources.outputs,    # Include validation data source to enforce wait.
     {
       for key, instances in local.key_instances_data :
       key => length(instances) > 1 ? merge(instances[*].value...) : instances[0].value

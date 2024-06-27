@@ -31,10 +31,10 @@ We maintain a list of known to-do items that require attention. If you are looki
 ## Known To-Do Items
 We maintain a list of known to-do items that require attention. If you are looking for something to work on, please check this list first. If you have any questions or need guidance, feel free to reach out to the maintainers.
 
-- [ ] Enhance documentation with examples.
-- [ ] Refactor merging to a different module.
-- [ ] Add a type field and determine the Terraform type of the value for key instances data.
-- [ ] Add module tests.
+- [ ] Enhance documentation with examples
+- [ ] Refactor merging to a module
+- [ ] Add Terraform type field for root key instances data
+- [ ] Add module tests
 
 ## Code of Conduct
 Please note that this project follows a [Code of Conduct](CODE_OF_CONDUCT.md). We expect all contributors to adhere to this code and create a positive and inclusive environment for everyone.
