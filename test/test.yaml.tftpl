@@ -1,0 +1,10 @@
+
+key       : value
+test_group: group_value
+
+yaml_myvar           : ${myvar}
+yaml_mylistvar_join  : [${join(",", mylistvar)}]
+yaml_mylistvar_format: ${format("%#v", mylistvar)}
+
+merge_key :
+  yaml : "yaml_val"
