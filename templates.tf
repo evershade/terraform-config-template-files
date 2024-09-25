@@ -160,10 +160,18 @@ locals {
   # TODO: move merging to a module
   template_file_configurations = merge(
     data.null_data_source.validate_sources.outputs, # Include validation data source to enforce wait.
-    {
-      for key, instances in local.key_instances_data :
-      key => length(instances) > 1 ? merge(instances[*].value...) : instances[0].value
-    }
+    merge(
+      {
+        for key, instances in local.key_instances_data :
+        key => instances[0].value
+        if length(instances) == 1
+      },
+      {
+        for key, instances in local.key_instances_data :
+        key => merge(instances[*].value...)
+        if length(instances) > 1
+      }
+    )
   )
 
   # Group keys with prefixes
