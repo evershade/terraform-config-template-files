@@ -23,6 +23,7 @@ output debug_template_locals {
     json_filepaths     = local.json_filepaths
     json_files         = local.json_files
     tfexpr_filepaths   = local.tfexpr_filepaths
+    tfexpr_structured_files = local.tfexpr_structured_files
     tfexpr_files       = local.tfexpr_files
     tfvars_filepaths   = local.tfvars_filepaths
     tfvars_files       = local.tfvars_files
