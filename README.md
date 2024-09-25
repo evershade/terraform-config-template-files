@@ -36,9 +36,10 @@ This Terraform module is designed to manage and configure template files for you
 Define the module in your Terraform configuration file ([`main.tf`](./main.tf)):
 
 ```terraform
-module "template_file_configuration" {
-  source  = "app.terraform.io/my-module/template_file_configuration"
-  version = "1.0.0"
+module "template-files" {
+  source  = "evershade/template-files/config"
+  version = "0.1.1"
+}
 
   # set your variables here
   template_variables = {
@@ -55,9 +56,9 @@ This feature allows you to provide a map of variables to the templates, which ca
 Here is an example of how you can define this variable:
 
 ```terraform
-module "template_file_configuration" {
-  source  = "app.terraform.io/my-module/template_file_configuration"
-  version = "1.0.0"
+module "template-files" {
+  source  = "evershade/template-files/config"
+  version = "0.1.1"
 
   template_variables = {
     var1 = "value1"
@@ -97,9 +98,9 @@ The input for this feature is a list of prefixes that you want to use for groupi
 Here is an example of how you can define this variable:
 
 ```variables.tf
-module "template_file_configuration" {
-  source  = "app.terraform.io/my-module/template_file_configuration"
-  version = "1.0.0"
+module "template-files" {
+  source  = "evershade/template-files/config"
+  version = "0.1.1"
 
   group_key_prefixes = ["app", "db"]
 }
